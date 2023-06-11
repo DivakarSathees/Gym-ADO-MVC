@@ -1,0 +1,37 @@
+@model List<dotnetapp.Models.GymMembership>
+
+<h2>GymMembership List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>JoiningDate</th>
+            <th>MembershipType</th>
+            <th>ExpiryDate</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var GymMembership in Model)
+        {
+            <tr>
+                <td>@GymMembership.id</td>
+                <td>@GymMembership.Name</td>
+                <td>@GymMembership.JoiningDate</td>
+                <td>@GymMembership.MembershipType</td>
+                <td>@GymMembership.ExpiryDate</td>                
+                <td>
+                    <a asp-action="Edit" asp-route-id="@GymMembership.id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@GymMembership.id">Delete</a>
+                </td>
+                
+                
+
+            </tr>
+        }
+    </tbody>
+</table>
+<br>
+<a href="@Url.Action("Create")" class="btn btn-primary">Add New GymMembership</a>
