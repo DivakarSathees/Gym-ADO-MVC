@@ -106,126 +106,126 @@ catch(Exception ex)
     }
 
 
-    public ActionResult Edit(int id)
-{
-    try
-    {
-        GymMembership gym = null;
+//     public ActionResult Edit(int id)
+// {
+//     try
+//     {
+//         GymMembership gym = null;
 
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            string query = "SELECT * FROM GymMembership WHERE id = @id";
+//         using (SqlConnection connection = new SqlConnection(connectionString))
+//         {
+//             string query = "SELECT * FROM GymMembership WHERE id = @id";
 
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@id", id);
+//             using (SqlCommand command = new SqlCommand(query, connection))
+//             {
+//                 command.Parameters.AddWithValue("@id", id);
 
-                connection.Open();
+//                 connection.Open();
 
-                SqlDataReader reader = command.ExecuteReader();
+//                 SqlDataReader reader = command.ExecuteReader();
 
-                if (reader.Read())
-                {
-                    gym = new GymMembership();
-                    gym.id = Convert.ToInt32(reader["id"]);
-                    gym.Name = reader["Name"].ToString();
-                    gym.JoiningDate = Convert.ToDateTime(reader["JoiningDate"]);
-                    gym.MembershipType = reader["MembershipType"].ToString();
-                    gym.ExpiryDate = Convert.ToDateTime(reader["ExpiryDate"]);
-                }
+//                 if (reader.Read())
+//                 {
+//                     gym = new GymMembership();
+//                     gym.id = Convert.ToInt32(reader["id"]);
+//                     gym.Name = reader["Name"].ToString();
+//                     gym.JoiningDate = Convert.ToDateTime(reader["JoiningDate"]);
+//                     gym.MembershipType = reader["MembershipType"].ToString();
+//                     gym.ExpiryDate = Convert.ToDateTime(reader["ExpiryDate"]);
+//                 }
 
-                reader.Close();
-            }
-        }
+//                 reader.Close();
+//             }
+//         }
 
-        if (gym == null)
-        {
-            return NotFound();
-        }
+//         if (gym == null)
+//         {
+//             return NotFound();
+//         }
 
-        return View(gym);
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine(ex.Message);
-        // You can handle the exception as per your requirements (e.g., logging, displaying an error message)
-        return BadRequest("An error occurred while retrieving the gym item.");
-    }
-}
+//         return View(gym);
+//     }
+//     catch (Exception ex)
+//     {
+//         Console.WriteLine(ex.Message);
+//         // You can handle the exception as per your requirements (e.g., logging, displaying an error message)
+//         return BadRequest("An error occurred while retrieving the gym item.");
+//     }
+// }
 
 
-    [HttpPost]
-    public ActionResult Edit(GymMembership gym)
-    {
-        try{
-        using (SqlConnection connection = new SqlConnection(connectionString))
-        {
-            string query = "UPDATE GymMembership SET Name = @Name, JoiningDate = @JoiningDate, MembershipType = @MembershipType, ExpiryDate = @ExpiryDate WHERE id = @id";
+//     [HttpPost]
+//     public ActionResult Edit(GymMembership gym)
+//     {
+//         try{
+//         using (SqlConnection connection = new SqlConnection(connectionString))
+//         {
+//             string query = "UPDATE GymMembership SET Name = @Name, JoiningDate = @JoiningDate, MembershipType = @MembershipType, ExpiryDate = @ExpiryDate WHERE id = @id";
 
-            using (SqlCommand command = new SqlCommand(query, connection))
-            {
-                command.Parameters.AddWithValue("@id", gym.id);
-                // Console.WriteLine(gym.id);
-                command.Parameters.AddWithValue("@Name", gym.Name);
-                                // Console.WriteLine(gym.Product);
+//             using (SqlCommand command = new SqlCommand(query, connection))
+//             {
+//                 command.Parameters.AddWithValue("@id", gym.id);
+//                 // Console.WriteLine(gym.id);
+//                 command.Parameters.AddWithValue("@Name", gym.Name);
+//                                 // Console.WriteLine(gym.Product);
 
-                command.Parameters.AddWithValue("@JoiningDate", gym.JoiningDate);
-                command.Parameters.AddWithValue("@MembershipType", gym.MembershipType);
-                command.Parameters.AddWithValue("@ExpiryDate", gym.ExpiryDate);
-                // command.Parameters.AddWithValue("@Price", gym.Price);
+//                 command.Parameters.AddWithValue("@JoiningDate", gym.JoiningDate);
+//                 command.Parameters.AddWithValue("@MembershipType", gym.MembershipType);
+//                 command.Parameters.AddWithValue("@ExpiryDate", gym.ExpiryDate);
+//                 // command.Parameters.AddWithValue("@Price", gym.Price);
 
-                connection.Open();
+//                 connection.Open();
 
-                int rowsAffected = command.ExecuteNonQuery();
+//                 int rowsAffected = command.ExecuteNonQuery();
 
-                if (rowsAffected == 0)
-                {
-                    // The provided ID does not exist in the GymMembership table
-                    return NotFound();
-                }
-            }
-        }}
-        catch(Exception ex)
-{
-    Console.WriteLine(ex.Message);
-}
+//                 if (rowsAffected == 0)
+//                 {
+//                     // The provided ID does not exist in the GymMembership table
+//                     return NotFound();
+//                 }
+//             }
+//         }}
+//         catch(Exception ex)
+// {
+//     Console.WriteLine(ex.Message);
+// }
 
-        return RedirectToAction("Index");
-    }
+//         return RedirectToAction("Index");
+//     }
 
-    public ActionResult Delete(int id)
-    {
-        try{
-            if (id <= 0)
-        {
-            return BadRequest();
-        }
-    using (SqlConnection connection = new SqlConnection(connectionString))
-    {
-        string query = "DELETE FROM GymMembership WHERE id = @id";
+//     public ActionResult Delete(int id)
+//     {
+//         try{
+//             if (id <= 0)
+//         {
+//             return BadRequest();
+//         }
+//     using (SqlConnection connection = new SqlConnection(connectionString))
+//     {
+//         string query = "DELETE FROM GymMembership WHERE id = @id";
 
-        using (SqlCommand command = new SqlCommand(query, connection))
-        {
-            command.Parameters.AddWithValue("@id", id);
+//         using (SqlCommand command = new SqlCommand(query, connection))
+//         {
+//             command.Parameters.AddWithValue("@id", id);
 
-            connection.Open();
-            int rowsAffected = command.ExecuteNonQuery();
+//             connection.Open();
+//             int rowsAffected = command.ExecuteNonQuery();
 
-                if (rowsAffected == 0)
-                {
-                    return NotFound();
-                }
-        }
-    }}
-    catch(Exception ex)
-{
-    Console.WriteLine(ex.Message);
-    return BadRequest("An error occurred while deleting the gym item.");
+//                 if (rowsAffected == 0)
+//                 {
+//                     return NotFound();
+//                 }
+//         }
+//     }}
+//     catch(Exception ex)
+// {
+//     Console.WriteLine(ex.Message);
+//     return BadRequest("An error occurred while deleting the gym item.");
 
-}
+// }
 
-    return RedirectToAction("Index");
-    }
+//     return RedirectToAction("Index");
+//     }
 
 
 }

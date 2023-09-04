@@ -2,7 +2,12 @@ using NUnit.Framework;
 using dotnetapp.Controllers;
 using dotnetapp.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
+using System.Reflection;
+using Moq;
+using System.Data;
+using System.Data.SqlClient;
+
 
 namespace GymMembershipControllerTests
 {
@@ -10,16 +15,22 @@ namespace GymMembershipControllerTests
     public class GymMembershipControllerTests
     {
         private GymController _controller;
+        private Type controllerType;
+        private Type carserviceType;
+        private PropertyInfo[] properties;
 
         [SetUp]
         public void Setup()
         {
             // Initialize the controller before each test
             _controller = new GymController();
+            carserviceType = typeof(dotnetapp.Models.GymMembership);
+            properties = carserviceType.GetProperties();
+            controllerType = typeof(GymController);
         }
 
         [Test]
-        public void test_case1()
+        public void Test_IndexReturns_ViewResult()
         {
             // Act
             var result = _controller.Index() as ViewResult;
@@ -31,7 +42,7 @@ namespace GymMembershipControllerTests
         }
 
         [Test]
-        public void test_case2()
+        public void Test_CreateReturns_ViewResult()
         {
             // Act
             var result = _controller.Create() as ViewResult;
@@ -42,45 +53,119 @@ namespace GymMembershipControllerTests
         }
 
         [Test]
-        public void test_case3()
+public void TestIndexMethodExists()
+{
+    // Arrange
+    var controllerType = typeof(GymController);
+    var methodName = "Index";
+
+    // Act
+    var indexMethod = controllerType.GetMethod(methodName);
+
+    // Assert
+    Assert.IsNotNull(indexMethod, $"{methodName} method should exist in GymController.");
+}
+
+        [Test]
+        public void TestCreateGetMethodExists()
         {
             // Arrange
-            int nonExistingId = 100; // Assuming there is no employee with ID 100
-
-            // Act
-            var result = _controller.Edit(nonExistingId) as NotFoundResult;
+            MethodInfo createGetMethod = controllerType.GetMethod("Create", new Type[0]);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<NotFoundResult>(result);
+            Assert.IsNotNull(createGetMethod, "Create method should exist in GymController.");
         }
 
         [Test]
-        public void test_case4()
+        public void TestCreatePostMethodExists()
         {
             // Arrange
-            int nonExistingId = 100; // Assuming there is no employee with ID 100
-
-            // Act
-            var result = _controller.Delete(nonExistingId) as NotFoundResult;
+            MethodInfo createPostMethod = controllerType.GetMethod("Create", new Type[] { typeof(GymMembership) });
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<NotFoundResult>(result);
+            Assert.IsNotNull(createPostMethod, "Create POST method should exist in GymController.");
         }
 
         [Test]
-        public void test_case5()
+        public void TestGymMembershipClassExists()
         {
             // Arrange
-            int invalidId = -1; // Assuming -1 is an invalid ID
-
-            // Act
-            var result = _controller.Delete(invalidId) as BadRequestResult;
+            Type furnitureType = typeof(dotnetapp.Models.GymMembership);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOf<BadRequestResult>(result);
+            Assert.IsNotNull(furnitureType, "GymMembership class should exist.");            
         }
+
+        [Test]
+        public void TestGymMembershipPropertiesExist()
+        {
+            // Assert
+            Assert.IsNotNull(properties, "GymMembership class should have properties.");
+            Assert.IsTrue(properties.Length > 0, "GymMembership class should have at least one property.");
+        }
+
+        [Test]
+        public void TestidProperty()
+        {
+            // Arrange
+            PropertyInfo idProperty = properties.FirstOrDefault(p => p.Name == "id");
+
+            // Assert
+            Assert.IsNotNull(idProperty, "id property should exist.");
+            Assert.AreEqual(typeof(int), idProperty.PropertyType, "id property should have data type 'int'.");
+        }
+
+        [Test]
+        public void TestNameProperty()
+        {
+            // Arrange
+            PropertyInfo productProperty = properties.FirstOrDefault(p => p.Name == "Name");
+
+            // Assert
+            Assert.IsNotNull(productProperty, "Name property should exist.");
+            Assert.AreEqual(typeof(string), productProperty.PropertyType, "Name property should have data type 'string'.");
+        }
+
+        [Test]
+        public void TestJoiningDateProperty()
+        {
+            // Arrange
+            PropertyInfo productProperty = properties.FirstOrDefault(p => p.Name == "JoiningDate");
+
+            // Assert
+            Assert.IsNotNull(productProperty, "JoiningDate property should exist.");
+            Assert.AreEqual(typeof(DateTime), productProperty.PropertyType, "JoiningDate property should have data type 'string'.");
+        }
+
+        [Test]
+        public void TestExpiryDateProperty()
+        {
+            // Arrange
+            PropertyInfo productProperty = properties.FirstOrDefault(p => p.Name == "ExpiryDate");
+
+            // Assert
+            Assert.IsNotNull(productProperty, "ExpiryDate property should exist.");
+            Assert.AreEqual(typeof(DateTime), productProperty.PropertyType, "ExpiryDate property should have data type 'string'.");
+        }
+
+        [Test]
+        public void Test_CreateViewFile_Exists()
+        {
+            string indexPath = Path.Combine(@"/home/coder/project/workspace/Gym-ADO-MVC/dotnetapp/Views/Gym", "Create.cshtml");
+            bool indexViewExists = File.Exists(indexPath);
+
+            Assert.IsTrue(indexViewExists, "Create.cshtml view file does not exist.");
+        }
+
+        [Test]
+        public void Test_IndexViewFile_Exists()
+        {
+            string indexPath = Path.Combine(@"/home/coder/project/workspace/Gym-ADO-MVC/dotnetapp/Views/Gym", "Index.cshtml");
+            bool indexViewExists = File.Exists(indexPath);
+
+            Assert.IsTrue(indexViewExists, "Index.cshtml view file does not exist.");
+        }
+
+    
     }
 }
